@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Space Invaders | Projeto</title>
+    <title>Space Invaders - Arcade</title>
 
     <style>
         * {
@@ -14,198 +14,312 @@
         }
 
         body {
+            background: #08000f;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
             min-height: 100vh;
-            background: #050505;
-            color: #fff;
-            font-family: "Courier New", monospace;
-            overflow-x: hidden;
         }
 
-        /* Fundo estrelado */
-        body::before {
-            content: "";
+        /* Fundo */
+        .background {
             position: fixed;
             inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 50% 40%, #3b075c 0%, transparent 35%),
+                linear-gradient(180deg, #08000f 0%, #12001f 100%);
+        }
+
+        /* Estrelas */
+        .background::after {
+            content: "";
+            position: absolute;
+            inset: 0;
             background-image:
-                radial-gradient(#ffffff 1px, transparent 1px),
-                radial-gradient(#ffffff 1px, transparent 1px);
-            background-size: 80px 80px, 120px 120px;
-            background-position: 20px 30px, 60px 90px;
-            opacity: 0.25;
-            z-index: -1;
+                radial-gradient(white 1px, transparent 1px),
+                radial-gradient(#b65cff 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px;
+            background-position: 20px 30px, 70px 80px;
+            opacity: 0.3;
         }
 
         header {
-            padding: 25px 8%;
+            height: 80px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #39ff14;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.25);
         }
 
         .logo {
-            color: #39ff14;
-            font-size: 1.3rem;
+            font-size: 22px;
             font-weight: bold;
-            text-shadow: 0 0 10px #39ff14;
+            color: #ff3c81;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
         }
 
         nav a {
-            color: white;
+            color: #ddd;
             text-decoration: none;
-            margin-left: 25px;
+            font-size: 14px;
             transition: 0.3s;
         }
 
         nav a:hover {
-            color: #39ff14;
-            text-shadow: 0 0 10px #39ff14;
+            color: #ff3c81;
         }
 
+        /* Hero */
         .hero {
-            min-height: 75vh;
+            min-height: calc(100vh - 80px);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            padding: 40px 20px;
+            justify-content: space-between;
+            gap: 60px;
+            padding: 70px 10%;
         }
 
-        .invader {
-            color: #39ff14;
-            font-size: 80px;
-            line-height: 1;
-            margin-bottom: 30px;
-            text-shadow:
-                0 0 5px #39ff14,
-                0 0 15px #39ff14,
-                0 0 30px #39ff14;
-            animation: float 2s ease-in-out infinite;
+        .content {
+            max-width: 600px;
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-12px);
-            }
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem);
-            color: #fff;
-            letter-spacing: 8px;
-            text-shadow: 4px 4px 0 #39ff14;
+        .tag {
+            color: #ff3c81;
+            font-size: 14px;
+            letter-spacing: 4px;
             margin-bottom: 20px;
         }
 
-        .subtitle {
-            max-width: 700px;
-            color: #bdbdbd;
-            font-size: 1.1rem;
+        h1 {
+            font-size: clamp(55px, 8vw, 110px);
+            line-height: 0.9;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 30px;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #ff3c81,
+                #9d4edd
+            );
+
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .description {
+            color: #b9afc2;
             line-height: 1.8;
+            font-size: 17px;
             margin-bottom: 35px;
         }
 
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
         .button {
-            display: inline-block;
-            padding: 15px 35px;
-            border: 2px solid #39ff14;
-            color: #39ff14;
+            padding: 15px 28px;
             text-decoration: none;
             font-weight: bold;
+            border-radius: 5px;
             transition: 0.3s;
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
         }
 
-        .button:hover {
-            background: #39ff14;
-            color: #000;
-            box-shadow: 0 0 25px #39ff14;
+        .primary {
+            background: #ff3c81;
+            color: white;
+            box-shadow: 0 0 25px rgba(255,60,129,0.4);
         }
 
-        .info {
-            padding: 60px 8%;
-            background: rgba(10, 10, 10, 0.9);
-            border-top: 1px solid #222;
+        .primary:hover {
+            background: #ff6599;
+            transform: translateY(-3px);
         }
 
-        .info h2 {
-            color: #39ff14;
+        .secondary {
+            border: 1px solid #555;
+            color: white;
+        }
+
+        .secondary:hover {
+            border-color: #ff3c81;
+            color: #ff3c81;
+        }
+
+        /* Nave / alien */
+        .game-display {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .planet {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle at 35% 30%,
+                #ff7aae,
+                #ff3c81 40%,
+                #6b1640 75%,
+                #250018
+            );
+
+            box-shadow:
+                0 0 50px rgba(255,60,129,0.5),
+                0 0 120px rgba(157,78,221,0.25);
+        }
+
+        .alien {
+            position: absolute;
+            font-size: 110px;
+            top: 55px;
+            filter: drop-shadow(0 0 15px #fff);
+            animation: hover 3s ease-in-out infinite;
+        }
+
+        .ship {
+            position: absolute;
+            bottom: 50px;
+            font-size: 75px;
+            filter: drop-shadow(0 0 15px #9d4edd);
+            animation: ship 2s ease-in-out infinite;
+        }
+
+        @keyframes hover {
+            0%, 100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(3deg);
+            }
+        }
+
+        @keyframes ship {
+            0%, 100% {
+                transform: translateX(-10px);
+            }
+
+            50% {
+                transform: translateX(10px);
+            }
+        }
+
+        /* Secção inferior */
+        .features {
+            padding: 80px 10%;
+            background: #050008;
+        }
+
+        .features h2 {
             text-align: center;
-            margin-bottom: 40px;
-            font-size: 2rem;
+            font-size: 35px;
+            margin-bottom: 50px;
         }
 
-        .cards {
-            max-width: 1000px;
-            margin: auto;
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
         }
 
-        .card {
-            padding: 25px;
-            border: 1px solid #333;
-            background: #0b0b0b;
+        .feature {
+            padding: 35px;
+            background: #0e0715;
+            border: 1px solid #24152d;
+            border-radius: 10px;
             transition: 0.3s;
         }
 
-        .card:hover {
-            border-color: #39ff14;
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+        .feature:hover {
+            transform: translateY(-8px);
+            border-color: #ff3c81;
+            box-shadow: 0 15px 40px rgba(255,60,129,0.12);
         }
 
-        .card h3 {
-            color: #39ff14;
+        .icon {
+            font-size: 35px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
             margin-bottom: 12px;
+            color: #ff3c81;
         }
 
-        .card p {
-            color: #aaa;
+        .feature p {
+            color: #918797;
             line-height: 1.6;
         }
 
         footer {
-            padding: 25px;
+            padding: 30px;
             text-align: center;
-            color: #666;
-            border-top: 1px solid #222;
-            font-size: 0.9rem;
+            color: #665d6b;
+            background: #050008;
+            border-top: 1px solid #1b101f;
         }
 
-        .blink {
-            animation: blink 1s steps(2, start) infinite;
-        }
+        /* Responsivo */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
 
-        @keyframes blink {
-            50% {
-                opacity: 0;
+            .buttons {
+                justify-content: center;
+            }
+
+            .game-display {
+                width: 320px;
+                height: 320px;
+            }
+
+            .planet {
+                width: 240px;
+                height: 240px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 600px) {
             header {
-                flex-direction: column;
-                gap: 15px;
+                padding: 0 5%;
+            }
+
+            nav {
+                gap: 12px;
             }
 
             nav a {
-                margin: 0 8px;
-                font-size: 0.85rem;
+                font-size: 12px;
             }
 
-            h1 {
-                letter-spacing: 3px;
+            .hero {
+                padding: 50px 7%;
             }
 
-            .invader {
-                font-size: 60px;
+            .game-display {
+                transform: scale(0.8);
             }
         }
     </style>
@@ -213,84 +327,117 @@
 
 <body>
 
+    <div class="background"></div>
+
     <header>
-        <div class="logo">/// SPACE PROJECT</div>
+        <div class="logo">ARCADE_01</div>
 
         <nav>
-            <a href="#inicio">Início</a>
-            <a href="#sobre">Sobre</a>
-            <a href="#projeto">Projeto</a>
+            <a href="#inicio">INÍCIO</a>
+            <a href="#sobre">SOBRE</a>
+            <a href="#jogo">JOGO</a>
         </nav>
     </header>
 
     <main>
+
         <section class="hero" id="inicio">
 
-            <div class="invader">
-                👾
+            <div class="content">
+
+                <div class="tag">
+                    /// PROJETO ARCADE
+                </div>
+
+                <h1>
+                    SPACE<br>
+                    INVADERS
+                </h1>
+
+                <p class="description">
+                    Uma viagem ao universo dos jogos arcade clássicos.
+                    Enfrenta uma invasão alienígena, controla a tua nave
+                    e tenta alcançar a pontuação máxima.
+                </p>
+
+                <div class="buttons">
+                    <a href="#jogo" class="button primary">
+                        COMEÇAR JOGO
+                    </a>
+
+                    <a href="#sobre" class="button secondary">
+                        SABER MAIS
+                    </a>
+                </div>
+
             </div>
 
-            <h1>SPACE INVADERS</h1>
+            <div class="game-display">
 
-            <p class="subtitle">
-                Bem-vindo ao nosso projeto inspirado num dos jogos arcade
-                mais icónicos de sempre. Prepara-te para enfrentar vagas
-                de invasores extraterrestres e proteger a Terra!
-            </p>
+                <div class="planet"></div>
 
-            <a href="#sobre" class="button">
-                INICIAR MISSÃO
-            </a>
-
-        </section>
-
-        <section class="info" id="sobre">
-
-            <h2>MISSÃO: DEFENDER A TERRA</h2>
-
-            <div class="cards">
-
-                <div class="card">
-                    <h3>👾 OS INVASORES</h3>
-                    <p>
-                        Uma armada de alienígenas aproxima-se cada vez mais.
-                        Elimina-os antes que consigam chegar à Terra.
-                    </p>
+                <div class="alien">
+                    👾
                 </div>
 
-                <div class="card">
-                    <h3>🚀 A NAVE</h3>
-                    <p>
-                        Controla a tua nave espacial, movimenta-te
-                        estrategicamente e dispara contra os inimigos.
-                    </p>
-                </div>
-
-                <div class="card">
-                    <h3>🎯 OBJETIVO</h3>
-                    <p>
-                        Sobrevive o máximo de tempo possível, elimina
-                        todos os invasores e alcança a maior pontuação.
-                    </p>
-                </div>
-
-                <div class="card" id="projeto">
-                    <h3>💻 O PROJETO</h3>
-                    <p>
-                        Este projeto recria a experiência clássica de
-                        Space Invaders através de programação e tecnologias web.
-                    </p>
+                <div class="ship">
+                    🚀
                 </div>
 
             </div>
 
         </section>
+
+
+        <section class="features" id="sobre">
+
+            <h2>PREPARA-TE PARA A INVASÃO</h2>
+
+            <div class="grid">
+
+                <div class="feature">
+                    <div class="icon">👾</div>
+
+                    <h3>ALIENS</h3>
+
+                    <p>
+                        Uma frota de invasores extraterrestres está
+                        a aproximar-se. Elimina-os antes que seja tarde.
+                    </p>
+                </div>
+
+
+                <div class="feature">
+                    <div class="icon">🚀</div>
+
+                    <h3>COMBATE</h3>
+
+                    <p>
+                        Controla a tua nave espacial e dispara contra
+                        as diferentes formações de inimigos.
+                    </p>
+                </div>
+
+
+                <div class="feature" id="jogo">
+                    <div class="icon">🏆</div>
+
+                    <h3>PONTUAÇÃO</h3>
+
+                    <p>
+                        Quanto mais inimigos destruíres, maior será a
+                        tua pontuação. Tenta bater o recorde!
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
     <footer>
-        <span class="blink">█</span>
-        SPACE INVADERS — PROJETO ACADÉMICO
-        <span class="blink">█</span>
+        SPACE INVADERS © 2026 — PROJETO DE DESENVOLVIMENTO WEB
     </footer>
 
 </body>
